@@ -14,6 +14,8 @@ import matplotlib.pyplot as plt
 
 import cv2
 
+import pickle as p
+
 BASEPATH = "C:/Users/Noahs/Desktop/train/"
 
 LABELS = set()
@@ -101,7 +103,7 @@ print(model.summary())
 early_stopping = EarlyStopping(patience=5, verbose=1,restore_best_weights=True)
 reduce_lr = ReduceLROnPlateau(factor=0.1, patience=3,verbose=1)
 
-hist = model.fit(X_train,y_train,batch_size=64,epochs=50,validation_data=(X_test,y_test), callbacks=[early_stopping, reduce_lr])
+hist = model.fit(X_train,y_train,batch_size=32,epochs=100,validation_data=(X_test,y_test), callbacks=[early_stopping, reduce_lr])
 
 loss, acc = model.evaluate(X_test,y_test,verbose=0)
 print(f"loss on the test set is {loss:.2f}")
