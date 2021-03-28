@@ -101,4 +101,22 @@ print(model.summary())
 early_stopping = EarlyStopping(patience=5, verbose=1,restore_best_weights=True)
 reduce_lr = ReduceLROnPlateau(factor=0.1, patience=3,verbose=1)
 
-model.fit(X_train,y_train,batch_size=64,epochs=50,validation_data=(X_test,y_test), callbacks=[early_stopping, reduce_lr])
+hist = model.fit(X_train,y_train,batch_size=64,epochs=50,validation_data=(X_test,y_test), callbacks=[early_stopping, reduce_lr])
+
+loss, acc = model.evaluate(X_test,y_test,verbose=0)
+print(f"loss on the test set is {loss:.2f}")
+print(f"accuracy on the test set is {acc:.3f}")
+
+with open('history_model', 'wb') as file:
+    p.dump(hist.history, file)
+
+filepath = 'model_VGG16.h5'
+model.save(filepath)
+filepath_model = 'model_VGG16.json'
+filepath_weights = 'weights_model_VGG16.h5'
+model_json = model.to_json()
+with open(filepath_model, "w") as json_file:
+    json_file.write(model_json)
+
+    model.save_weights('weights_model_VGG16.h5')
+    print("Saved model to disk")
